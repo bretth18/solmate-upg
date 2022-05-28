@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity >=0.8.0;
 
+import "openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol";
+
 /// @notice Modern, minimalist, and gas efficient ERC-721 implementation.
 /// @author Solmate (https://github.com/Rari-Capital/solmate/blob/main/src/tokens/ERC721.sol)
-abstract contract ERC721Upgradeable {
+abstract contract ERC721Upgradeable is Initializable {
     /*//////////////////////////////////////////////////////////////
                                  EVENTS
     //////////////////////////////////////////////////////////////*/
@@ -51,12 +53,16 @@ abstract contract ERC721Upgradeable {
     mapping(address => mapping(address => bool)) public isApprovedForAll;
 
     /*//////////////////////////////////////////////////////////////
-                               CONSTRUCTOR
+                               INITIALIZATION
     //////////////////////////////////////////////////////////////*/
 
-    constructor(string memory _name, string memory _symbol) {
+    function __ERC721Upgradeable_init_unchained(string memory _name, string memory _symbol) internal onlyInitializing {
         name = _name;
         symbol = _symbol;
+    }
+
+    function __ERC721Upgradeable_init(string memory _name, string memory _symbol) internal onlyInitializing {
+        __ERC721Upgradeable_init_unchained(_name, _symbol);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -215,6 +221,13 @@ abstract contract ERC721Upgradeable {
             "UNSAFE_RECIPIENT"
         );
     }
+
+    /**
+     * @dev This empty reserved space is put in place to allow future versions to add new
+     * variables without shifting down storage in the inheritance chain.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
+    uint256[42] private __gap;
 }
 
 /// @notice A generic interface for a contract which properly accepts ERC721 tokens.
